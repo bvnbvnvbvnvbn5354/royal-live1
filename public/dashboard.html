@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090807">
+    <title>لوحة اللاعب | إدارة الحساب</title>
+    <link rel="icon" href="https://i.postimg.cc/4YLhBRm9/image.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="page-app">
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-mark">
+                <img src="https://i.postimg.cc/4YLhBRm9/image.png" alt="شعار السيرفر">
+            </div>
+            <div class="titles">
+                <strong>لوحة اللاعب</strong>
+                <span>إدارة الحساب والرصيد والمركبات</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="live-dot" title="متصل">
+                <i></i>
+                <span>متصل</span>
+            </div>
+            <div class="user-chip">
+                <i class="fa-regular fa-circle-user"></i>
+                <span id="headerUser">...</span>
+            </div>
+            <button id="logoutBtn" class="logout-btn" type="button">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>خروج</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-label">القائمة</div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#" class="active" data-page="home">
+                        <i class="fas fa-house"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="transfer">
+                        <i class="fas fa-money-bill-transfer"></i>
+                        <span>تحويل</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="cars">
+                        <i class="fas fa-car"></i>
+                        <span>المعرض</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <div class="dashboard">
+                <div id="page-home" class="page-section active">
+                    <div class="header">
+                        <div>
+                            <h1 id="welcome">مرحباً</h1>
+                            <p class="hint">نظرة عامة على حسابك وتحديث لحظي للرصيد</p>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-card accent">
+                            <div class="label"><span class="ico"><i class="fa-solid fa-wallet"></i></span> الرصيد الحالي</div>
+                            <div class="money-display" id="moneyDisplay">$0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><span class="ico"><i class="fa-solid fa-hashtag"></i></span> المعرف</div>
+                            <div class="stat-value" id="userIdDisplay">-</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><span class="ico"><i class="fa-regular fa-id-card"></i></span> الهوية</div>
+                            <div class="stat-value" id="haweyaDisplay">-</div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <button type="button" class="quick-btn" data-goto="transfer">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span>تحويل أموال<small>أرسل رصيداً إلى لاعب آخر</small></span>
+                        </button>
+                        <button type="button" class="quick-btn" data-goto="cars">
+                            <i class="fa-solid fa-car-side"></i>
+                            <span>معرض السيارات<small>تصفح واشترِ مركبة لحسابك</small></span>
+                        </button>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fa-regular fa-id-card"></i> بيانات الحساب</h3>
+                        <div class="info-grid">
+                            <div class="info-row">
+                                <span>اسم المستخدم</span>
+                                <strong id="usernameDisplay">-</strong>
+                            </div>
+                            <div class="info-row">
+                                <span>المعرف</span>
+                                <strong><button type="button" class="copy-btn" data-copy="userIdDisplay2" aria-label="نسخ المعرف"><i class="fa-regular fa-copy"></i></button><span id="userIdDisplay2">-</span></strong>
+                            </div>
+                            <div class="info-row">
+                                <span>رقم الهوية</span>
+                                <strong><button type="button" class="copy-btn" data-copy="haweyaDisplay2" aria-label="نسخ الهوية"><i class="fa-regular fa-copy"></i></button><span id="haweyaDisplay2">-</span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-transfer" class="page-section">
+                    <div class="section-head">
+                        <h2>تحويل الأموال</h2>
+                        <p>أرسل مبلغاً إلى لاعب آخر داخل السيرفر بشكل فوري</p>
+                    </div>
+                    <div class="transfer-layout">
+                        <div class="transfer-section">
+                            <div id="transferError" class="error" style="display: none;"></div>
+                            <div id="transferSuccess" class="success" style="display: none;"></div>
+
+                            <form id="transferForm">
+                                <div class="form-group">
+                                    <label for="toUsername">المستلم</label>
+                                    <input type="text" id="toUsername" name="toUsername" required placeholder="اسم المستخدم">
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">المبلغ</label>
+                                    <div class="amount-wrap">
+                                        <span class="currency">$</span>
+                                        <input type="number" id="amount" name="amount" min="1" required placeholder="0">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn" id="transferBtn">تأكيد التحويل</button>
+                            </form>
+                        </div>
+                        <aside class="transfer-aside">
+                            <h4>الرصيد المتاح</h4>
+                            <div class="aside-balance" id="transferBalance">$0</div>
+                            <p class="aside-note">تأكد من اسم المستلم قبل التأكيد. لا يمكن التراجع عن التحويل بعد إتمامه.</p>
+                        </aside>
+                    </div>
+                </div>
+
+                <div id="page-cars" class="page-section">
+                    <div class="car-section">
+                        <div class="section-head">
+                            <h2>معرض السيارات</h2>
+                            <p>ابحث بالاسم أو رقم الموديل ثم اختر المركبة واللون</p>
+                        </div>
+                        <div id="carError" class="error" style="display: none;"></div>
+                        <div id="carSuccess" class="success" style="display: none;"></div>
+
+                        <div class="cars-toolbar">
+                            <input type="search" id="carSearch" placeholder="ابحث بالاسم أو رقم الموديل" autocomplete="off">
+                        </div>
+                        <div class="filter-chips" id="carFilters">
+                            <button type="button" class="chip active" data-filter="all">الكل</button>
+                            <button type="button" class="chip" data-filter="eco">اقتصادية</button>
+                            <button type="button" class="chip" data-filter="mid">متوسطة</button>
+                            <button type="button" class="chip" data-filter="lux">فاخرة</button>
+                            <button type="button" class="chip" data-filter="sport">رياضية</button>
+                        </div>
+
+                        <div class="cars-grid" id="carsGrid"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="app-footer">لوحة اللاعب · عمليات الحساب مرتبطة مباشرة بالسيرفر</p>
+        </div>
+    </div>
+    
+    <!-- نافذة اختيار اللون -->
+    <div class="modal-backdrop" id="colorModal" style="display: none;">
+        <div class="modal color-modal">
+            <h3>اختر لون السيارة</h3>
+            <p class="color-car-name" id="colorCarName"></p>
+            <div class="modal-body">
+                <div class="car-color-preview" aria-hidden="true">
+                    <div class="car-preview-shell">
+                        <span class="car-preview-primary" id="previewPrimary"></span>
+                        <span class="car-preview-secondary" id="previewSecondary"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>اللون الأساسي</label>
+                    <div class="color-swatches" id="color1Swatches" data-target="color1"></div>
+                    <input type="hidden" id="color1" value="7">
+                </div>
+                <div class="form-group">
+                    <label>اللون الثانوي</label>
+                    <div class="color-swatches" id="color2Swatches" data-target="color2"></div>
+                    <input type="hidden" id="color2" value="7">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost btn" onclick="closeColorModal()">إلغاء</button>
+                    <button type="button" class="btn" onclick="confirmBuyCar()">تأكيد الشراء</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const carsList = [
+            { id: 400, name: 'BMW F10', model: 400, price: 150000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523694607142912/Gemini_Generated_Image_qq201jqq201jqq20.jpg?ex=6a9c749b&is=6a9b231b&hm=ed95706008b350ce9442fb1bb6fb85f639cbb41fb6cf8bbac7dd86d132a0b06c&=&format=webp&width=1280&height=634' },
+            { id: 401, name: 'BMW E39', model: 401, price: 100000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523695563317259/Gemini_Generated_Image_hgs8dlhgs8dlhgs8.jpg?ex=6a9c749b&is=6a9b231b&hm=347e6f1ba8990de3e343cbe2f07f90fb27844c0f20053feb5e5437b4a0034bb7&=&format=webp&width=1280&height=583' },
+            { id: 535, name: 'Toyota شاص', model: 535, price: 135000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523695072845854/Gemini_Generated_Image_nqfn5cnqfn5cnqfn.jpg?ex=6a9c749b&is=6a9b231b&hm=5c8a3f690ce4867c2013d465f86fe0c88689e29280dc61bcd46ac458d477716d&=&format=webp&width=1280&height=638' },
+            { id: 404, name: 'BMW M4', model: 404, price: 175000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523693868818582/Gemini_Generated_Image_hn95yuhn95yuhn95.jpg?ex=6a9c749b&is=6a9b231b&hm=7eff33a41c82fb5ca6932464ed950066559048e661ff12bb88c21f0ad34defc1&=&format=webp&width=1280&height=550' },
+            { id: 409, name: 'Hyundai افانتي', model: 409, price: 60000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523693357109349/Gemini_Generated_Image_zbvelvzbvelvzbve.jpg?ex=6a9c749a&is=6a9b231a&hm=510c59956a27974be6b09d7e1a88dee7cba8ce547341d664735bde2c6c058636&=&format=webp&width=1280&height=648' },
+            { id: 410, name: 'Toyota كامري 2010', model: 410, price: 70000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523694208548917/Gemini_Generated_Image_9axwww9axwww9axw.jpg?ex=6a9c749b&is=6a9b231b&hm=6dd43e1e937b358706f76b509e9f44879e79ca48f2a83bcd7537f98748fa5912&=&format=webp&width=1280&height=574' },
+            { id: 419, name: 'Toyota يارز', model: 419, price: 65000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523692975562925/Gemini_Generated_Image_glbpp1glbpp1glbp.jpg?ex=6a9c749a&is=6a9b231a&hm=333156c25982db8889cb673a1022794c07a5355bec76b94c327a8d497c52e589&=&format=webp&width=1280&height=714' },
+            { id: 412, name: 'فيرنا', model: 412, price: 45000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523692505927723/Gemini_Generated_Image_24gho424gho424gh.jpg?ex=6a9c749a&is=6a9b231a&hm=531fefccded845d9146397340e21d31ada59ecf1879767247989b5f883f248e5&=&format=webp&width=1280&height=613' },
+            { id: 418, name: 'Toyota تندرا', model: 418, price: 200000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523695940927619/Gemini_Generated_Image_mrvsrrmrvsrrmrvs.jpg?ex=6a9c749b&is=6a9b231b&hm=04b3523189ee80611bbbff5c1010f5c11e77bd8adc4ab518f0ea3264d94b00fd&=&format=webp&width=1280&height=664' },
+            { id: 405, name: 'BMW جناح', model: 405, price: 140000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523691964858438/Gemini_Generated_Image_53cadr53cadr53ca.jpg?ex=6a9c749a&is=6a9b231a&hm=d473447d375d70e9357479e0565e500faab23f1902925fcaa1dc8b60f89855ba&=&format=webp&width=1280&height=585' },
+            { id: 421, name: 'سامسونج SM5', model: 421, price: 50000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523792187621446/Gemini_Generated_Image_qpp817qpp817qpp8.jpg?ex=6a9c74b2&is=6a9b2332&hm=e8b50fb0327a2c3ef78ace6adb3c83c2e9105c4f8c2a16676857cd1c4e6ef793&=&format=webp&width=1280&height=595' },
+            { id: 426, name: 'شفرليت اوبترا', model: 426, price: 53000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523791592165517/Gemini_Generated_Image_fxiijcfxiijcfxii.jpg?ex=6a9c74b2&is=6a9b2332&hm=850332e898497f88f02d935732f41499f2fbf39351c6369619dfb5ac72792f9e&=&format=webp&width=1280&height=599' },
+            { id: 429, name: 'نيسان مكسمه', model: 429, price: 67000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523790312640512/Gemini_Generated_Image_xeiv36xeiv36xeiv.jpg?ex=6a9c74b2&is=6a9b2332&hm=aebbb601034b4ba1162c7dabba4633bf19cd10dc54f32a5e0302db91874b6849&=&format=webp&width=1280&height=680' },
+            { id: 436, name: 'كامري 2014', model: 436, price: 83000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545526555013292223/Gemini_Generated_Image_6y56ei6y56ei6y56_1.jpg?ex=6a9c7745&is=6a9b25c5&hm=e48def0509491f845042979f5885d9230a232a4bf2135c14137ff9d415d2974a&=&format=webp&width=1280&height=609' },
+            { id: 445, name: 'لزيرا لاباتشي', model: 445, price: 75000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523791109562458/Gemini_Generated_Image_dv06p2dv06p2dv06.jpg?ex=6a9c74b2&is=6a9b2332&hm=210570ebc4c2f244cefba848f4b11adb33180f5239618da0752fc47f52d940fa&=&format=webp&width=1280&height=555' },
+            { id: 458, name: 'سوناتا 2006', model: 458, price: 40000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523789205479484/Gemini_Generated_Image_49wp4x49wp4x49wp.jpg?ex=6a9c74b1&is=6a9b2331&hm=4de0b188700b7ebda1d79f3ca3d7b48be4aec8fb3f3b045b26875037ee4fa6ca&=&format=webp&width=1280&height=582' },
+            { id: 466, name: 'Mercedes E63', model: 466, price: 85000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523789545214072/Gemini_Generated_Image_kdre96kdre96kdre.jpg?ex=6a9c74b1&is=6a9b2331&hm=94ab0ebdb91356e0181f584d50b7bf488689c7998b338541bad3685ebe429fb4&=&format=webp&width=1280&height=676' },
+            { id: 467, name: 'كيا اوبتيما 2016', model: 467, price: 75000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523789943537755/Gemini_Generated_Image_wwky20wwky20wwky.jpg?ex=6a9c74b1&is=6a9b2331&hm=72d454cb310b9a9574a11771e4aebc956ce7815d450f2bf97691616397d96980&=&format=webp&width=1280&height=585' },
+            { id: 503, name: 'هونديا لنترا', model: 503, price: 50000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523788844761148/Gemini_Generated_Image_sjw1pnsjw1pnsjw1.jpg?ex=6a9c74b1&is=6a9b2331&hm=8b30c2d34e1836d72c9e7ccab37e16100ccb7347d386f47e26de58433ba0561f&=&format=webp&width=1280&height=545' },
+            { id: 477, name: 'هونداي ازيرا', model: 477, price: 90000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523811607117954/Gemini_Generated_Image_5m9fva5m9fva5m9f.jpg?ex=6a9c74b7&is=6a9b2337&hm=941302936061852263bf3e67c73cb1bf9a5c403a83a339ce00cafd2f461ae2eb&=&format=webp&width=1280&height=508' },
+            { id: 479, name: 'افانتي لاغبياء', model: 479, price: 47000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523788454826084/Gemini_Generated_Image_cyq9gzcyq9gzcyq9.jpg?ex=6a9c74b1&is=6a9b2331&hm=51d49173d4e8a5d88ba940d952adc88973e0711e36defe719d100644ccaaa010&=&format=webp&width=1280&height=772' },
+            { id: 491, name: 'Mercedes E63G', model: 491, price: 100000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523811003277352/Gemini_Generated_Image_ygah7aygah7aygah.jpg?ex=6a9c74b6&is=6a9b2336&hm=bedb514965410386f7806cd6df06729236c8aef68f0b9152ab4fc0e62e129221&=&format=webp&width=1280&height=574' },
+            { id: 494, name: 'Mercedes C32', model: 494, price: 92000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523810227327047/Gemini_Generated_Image_za4urzza4urzza4u.jpg?ex=6a9c74b6&is=6a9b2336&hm=172b420d87d4c3174c6b034c96593d6bf7a9832e091674cd403d030f80c7c726&=&format=webp&width=1280&height=592' },
+            { id: 496, name: 'Mercedes C63', model: 496, price: 92000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545523809686130718/Gemini_Generated_Image_vuv91bvuv91bvuv9.jpg?ex=6a9c74b6&is=6a9b2336&hm=3faf57137ef1c302a968ab61f864a64724bb963c14bda214c51ccf47c4fbca37&=&format=webp&width=1280&height=572' },
+            { id: 518, name: 'كيا K8', model: 518, price: 145000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545539332860026940/Gemini_Generated_Image_4t2rvr4t2rvr4t2r.jpg?ex=6a9c832b&is=6a9b31ab&hm=3643d8d236730c67e1a8ad6345be58876c49eb8ebaca613334e8253184df1aab&=&format=webp&width=1280&height=625' },
+            { id: 540, name: 'هونداي جينسس', model: 540, price: 51000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545538525217423390/Gemini_Generated_Image_rai9tdrai9tdrai9.jpg?ex=6a9c826b&is=6a9b30eb&hm=ef4fc01dc57eb23e26743efaddb4efbabf8166b87b732ee0d1d6191269f9cb73&=&format=webp&width=1280&height=625' },
+            { id: 541, name: 'دودج SRT', model: 541, price: 250000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545532772297216121/Gemini_Generated_Image_kykczkykczkykczk.jpg?ex=6a9c7d0f&is=6a9b2b8f&hm=cff39c81adcc4545852c05074b6ccbe6aefc3897cac405e880ace576cc10af0e&=&format=webp&width=1280&height=625' },
+            { id: 545, name: 'هونداي سنتفئ', model: 545, price: 63000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545533505226801222/Gemini_Generated_Image_1vnicj1vnicj1vni.jpg?ex=6a9c7dbe&is=6a9b2c3e&hm=e8e50e99eeb9fdcad0df589924b21a10d94ac64257b0cffc65a2aa3e4453e6c2&=&format=webp&width=1280&height=625' },
+            { id: 551, name: 'Mercedes GT63', model: 551, price: 180000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545534178710392925/Gemini_Generated_Image_llucynllucynlluc.jpg?ex=6a9c7e5e&is=6a9b2cde&hm=48705a81008670cfff88ca431742f3365c9dc11793884cc9569d0060b55bf446&=&format=webp&width=1280&height=625' },
+            { id: 558, name: 'هونداي جينسس 2016', model: 558, price: 100000, image: 'https://media.discordapp.net/attachments/1526559113117437952/1545535843509473414/Gemini_Generated_Image_u1sjnju1sjnju1sj.jpg?ex=6a9c7feb&is=6a9b2e6b&hm=57368f86969e13e0c520f947e8a73cfb62b866d8905b829d2f2daaf7e1895c6b&=&format=webp&width=512&height=250' }
+        ];
+
+        let pendingCar = null;
+        let activeFilter = 'all';
+
+        const carColors = [
+        { id: 0, hex: '#020101' },
+        { id: 1, hex: '#ffffff' },
+        { id: 3, hex: '#ae0000' },
+        { id: 79, hex: '#001d86' },
+        { id: 44, hex: '#2a8600' },
+        { id: 6, hex: '#ff6700' },
+  
+        ];
+
+        function normalizeCarColor(value, fallback = 1) {
+            const numeric = Number(value);
+            if (!Number.isFinite(numeric)) return fallback;
+            return Math.min(255, Math.max(0, Math.floor(numeric)));
+        }
+
+        function colorHex(id) {
+            const found = carColors.find(c => c.id === normalizeCarColor(id, 1));
+            return found ? found.hex : '#3d8bff';
+        }
+
+        function updateColorPreview() {
+            const c1 = normalizeCarColor(document.getElementById('color1').value, 1);
+            const c2 = normalizeCarColor(document.getElementById('color2').value, 1);
+            document.getElementById('previewPrimary').style.background = colorHex(c1);
+            document.getElementById('previewSecondary').style.background = colorHex(c2);
+        }
+
+        function selectCarColor(targetId, colorId) {
+            const normalized = normalizeCarColor(colorId, 1);
+            document.getElementById(targetId).value = String(normalized);
+            const wrap = document.getElementById(targetId + 'Swatches');
+            wrap.querySelectorAll('.color-swatch').forEach(btn => {
+                btn.classList.toggle('selected', Number(btn.dataset.id) === normalized);
+            });
+            updateColorPreview();
+        }
+
+        function renderColorSwatches() {
+            ['color1', 'color2'].forEach(targetId => {
+                const wrap = document.getElementById(targetId + 'Swatches');
+                wrap.innerHTML = '';
+                carColors.forEach(color => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'color-swatch';
+                    btn.dataset.id = color.id;
+                    btn.style.background = color.hex;
+                    btn.setAttribute('aria-label', 'لون ' + color.id);
+                    btn.addEventListener('click', () => selectCarColor(targetId, color.id));
+                    wrap.appendChild(btn);
+                });
+                selectCarColor(targetId, document.getElementById(targetId).value);
+            });
+        }
+
+        function formatMoney(n) {
+            return '$' + Number(n || 0).toLocaleString('en-US');
+        }
+
+        function carTier(car) {
+            if (car.price >= 250000) return { key: 'lux', label: 'فاخرة' };
+            if (car.price >= 100000) return { key: 'mid', label: 'متوسطة' };
+            return { key: 'eco', label: 'اقتصادية' };
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.classList.add('show');
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => el.classList.remove('show'), 2600);
+        }
+
+        function goToPage(page) {
+            document.querySelectorAll('.sidebar-menu a').forEach(l => {
+                l.classList.toggle('active', l.getAttribute('data-page') === page);
+            });
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+        }
+
+        function filteredCars() {
+            const searchEl = document.getElementById('carSearch');
+            const q = (searchEl ? searchEl.value : '').trim().toLowerCase();
+            return carsList.filter(c => {
+                const matchText = c.name.toLowerCase().includes(q) || String(c.model).includes(q);
+                const matchTier = activeFilter === 'all' || carTier(c).key === activeFilter;
+                return matchText && matchTier;
+            });
+        }
+
+        function renderCars(list) {
+            const carsGrid = document.getElementById('carsGrid');
+            carsGrid.innerHTML = '';
+            if (!list.length) {
+                carsGrid.innerHTML = '<div class="empty-cars"><i class="fa-regular fa-folder-open"></i><br>لا توجد نتائج مطابقة</div>';
+                return;
+            }
+            list.forEach(car => {
+                const tier = carTier(car);
+                const carCard = document.createElement('div');
+                carCard.className = 'car-card';
+                carCard.innerHTML = `
+                    <div class="car-card-image">
+                        <span class="car-badge">${tier.label}</span>
+                        <img src="${car.image || 'https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=900&q=80'}" alt="${car.name}" loading="lazy">
+                    </div>
+                    <div class="car-card-body">
+                        <div class="car-card-name">${car.name}</div>
+                        <div class="car-card-model">موديل ${car.model}</div>
+                        <div class="car-card-price">${formatMoney(car.price)}</div>
+                        <button class="car-card-buy" type="button" data-model="${car.model}" data-price="${car.price}" data-name="${car.name}">شراء</button>
+                    </div>
+                `;
+                carsGrid.appendChild(carCard);
+            });
+        }
+
+        function loadCars() {
+            renderCars(filteredCars());
+        }
+
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                if (!data.success) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                const user = data.user;
+                document.getElementById('welcome').textContent = `مرحباً، ${user.username}`;
+                document.getElementById('headerUser').textContent = user.username;
+                document.getElementById('moneyDisplay').textContent = formatMoney(user.money);
+                document.getElementById('usernameDisplay').textContent = user.username;
+                document.getElementById('userIdDisplay').textContent = user.uid;
+                document.getElementById('userIdDisplay2').textContent = user.uid;
+                document.getElementById('haweyaDisplay').textContent = user.haweya || 'غير متوفر';
+                document.getElementById('haweyaDisplay2').textContent = user.haweya || 'غير متوفر';
+                document.getElementById('transferBalance').textContent = formatMoney(user.money);
+            } catch (error) {
+                window.location.href = '/login.html';
+            }
+        }
+
+        loadUserData();
+        setInterval(loadUserData, 5000);
+        loadCars();
+        renderColorSwatches();
+
+        const carSearch = document.getElementById('carSearch');
+        if (carSearch) carSearch.addEventListener('input', loadCars);
+
+        const carFilters = document.getElementById('carFilters');
+        if (carFilters) {
+            carFilters.addEventListener('click', (e) => {
+                const chip = e.target.closest('.chip');
+                if (!chip) return;
+                activeFilter = chip.dataset.filter;
+                document.querySelectorAll('#carFilters .chip').forEach(c => c.classList.toggle('active', c === chip));
+                loadCars();
+            });
+        }
+
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.addEventListener('click', () => goToPage(btn.dataset.goto));
+        });
+
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const text = document.getElementById(btn.dataset.copy).textContent;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast('تم النسخ');
+                } catch (err) {
+                    showToast(text);
+                }
+            });
+        });
+
+        document.getElementById('carsGrid').addEventListener('click', (e) => {
+            const btn = e.target.closest('.car-card-buy');
+            if (!btn) return;
+            pendingCar = {
+                model: Number(btn.dataset.model),
+                price: Number(btn.dataset.price),
+                name: btn.dataset.name
+            };
+            document.getElementById('colorCarName').textContent = pendingCar.name + ' · موديل ' + pendingCar.model;
+            selectCarColor('color1', 7);
+            selectCarColor('color2', 7);
+            document.getElementById('colorModal').style.display = 'flex';
+        });
+
+        function closeColorModal() {
+            pendingCar = null;
+            document.getElementById('colorModal').style.display = 'none';
+        }
+
+        async function confirmBuyCar() {
+            if (!pendingCar) return;
+            const color1 = normalizeCarColor(document.getElementById('color1').value, 1);
+            const color2 = normalizeCarColor(document.getElementById('color2').value, 1);
+            const errorDiv = document.getElementById('carError');
+            const successDiv = document.getElementById('carSuccess');
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/buy-car', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        carModel: pendingCar.model, 
+                        carPrice: pendingCar.price,
+                        color1: color1,
+                        color2: color2
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    successDiv.textContent = data.message;
+                    successDiv.style.display = 'flex';
+                    showToast(data.message || 'تم الشراء بنجاح');
+                    loadUserData();
+                    closeColorModal();
+                } else {
+                    errorDiv.textContent = data.error;
+                    errorDiv.style.display = 'flex';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'حدث خطأ في الاتصال';
+                errorDiv.style.display = 'flex';
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+            } finally {
+                window.location.href = '/login.html';
+            }
+        });
+
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                goToPage(link.getAttribute('data-page'));
+            });
+        });
+
+        document.getElementById('transferForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const toUsername = document.getElementById('toUsername').value.trim();
+            const amount = parseInt(document.getElementById('amount').value, 10);
+            const errorDiv = document.getElementById('transferError');
+            const successDiv = document.getElementById('transferSuccess');
+            const btn = document.getElementById('transferBtn');
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'جاري التحويل...';
+            try {
+                const response = await fetch('/api/transfer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ toUsername, amount })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    successDiv.textContent = data.message;
+                    successDiv.style.display = 'flex';
+                    document.getElementById('transferForm').reset();
+                    loadUserData();
+                    showToast('تم التحويل بنجاح');
+                } else {
+                    errorDiv.textContent = data.error;
+                    errorDiv.style.display = 'flex';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'حدث خطأ في الاتصال';
+                errorDiv.style.display = 'flex';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'تأكيد التحويل';
+            }
+        });
+    </script>
+</body>
+</html>
